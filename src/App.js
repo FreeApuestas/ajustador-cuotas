@@ -8,21 +8,21 @@ function App() {
   const [nCuotas, setNCuotas] = useState(1);
   const [ini, setIni] = useState({ cantidad: 0, cuota: 0 });
   const [cuotas, setCuotas] = useState([]);
-  const [res, setRes] = useState({ apostado: 0, ganado: 0 })
+  const [res, setRes] = useState({ apostado: 0, ganado: 0 });
 
   const abc = ["A", "B", "C", "D", "E", "F"]
 
   useEffect(() => {
     const initialInputs = Array.from({ length: nCuotas }, () => ({ value: 0, result: 0 }));
     setCuotas(initialInputs);
+    setRes({ apostado: 0, ganado: 0 });
   }, [nCuotas]);
 
   useEffect(() => {
-    console.log(cuotas);
-    let apostado = cuotas.map((c) => c.result).reduce((partialSum, a) => partialSum + a, 0);
+    let apostado = cuotas.map((c) => c.result).reduce((partialSum, a) => partialSum + a, 0) + ini.cantidad;
     setRes({
-      apostado: apostado,
-      ganado: ini.cantidad * ini.cuota - apostado
+      apostado: parseFloat(apostado).toFixed(2),
+      ganado: parseFloat(ini.cantidad * ini.cuota - apostado).toFixed(2)
     })
   }, [cuotas,ini])
 
@@ -46,20 +46,26 @@ function App() {
 
   function calcular() {
     const nerdamer = require("nerdamer/all.min")
-    let arr = cuotas.map((item, index) => {
-      let rest = [];
-      for (let j = 0; j <= cuotas.length - 1; j++) {
-        if (j !== index) {
-          rest.push(j);
-        }
-      }
-      return (1 - item.value) + abc[index] + rest.map((it) => "+" + abc[it]).join("") + "=-" + ini.cantidad
-    });
-    console.log(arr);
-    var sol = nerdamer.solveEquations(arr);
     let temp=[];
-    for (let j = 0; j <= cuotas.length - 1; j++) {
-      temp.push({value:cuotas[j].value,result:sol[j][1]})
+    if (cuotas.length===1){
+      let one=ini.cantidad/(cuotas[0].value-1).toFixed(2);
+      temp.push({value:cuotas[0].value,result:one});
+    }else{
+      let arr = cuotas.map((item, index) => {
+        let rest = [];
+        for (let j = 0; j <= cuotas.length - 1; j++) {
+          if (j !== index) {
+            rest.push(j);
+          }
+        }
+        return (1 - item.value) + abc[index] + rest.map((it) => "+" + abc[it]).join("") + "+" + ini.cantidad +"=0" 
+      });
+      console.log(arr);
+      var sol = nerdamer.solveEquations(arr);
+      console.log(sol);
+      for (let j = 0; j <= cuotas.length - 1; j++) {
+        temp.push({value:cuotas[j].value,result:parseFloat(sol[j][1]).toFixed(2)})
+      }
     }
     setCuotas(temp);
   }
@@ -94,7 +100,7 @@ function App() {
             <InputGroup>
               <Form.Control aria-label="catidad" disabled readOnly placeholder='Cantidad' default={input.result} value={input.result} />
               <InputGroup.Text>x</InputGroup.Text>
-              <Form.Control aria-label="cuota" type="number" placeholder='Rellename' onChange={(e) => handleChangeCuotaValue(index, e.target.value)} />
+              <Form.Control aria-label="cuota" type="number" value={input.value} placeholder='Rellename' onChange={(e) => handleChangeCuotaValue(index, e.target.value)} />
             </InputGroup>
           ))}
         </Col>
