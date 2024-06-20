@@ -24,19 +24,12 @@ function App() {
       apostado: apostado,
       ganado: ini.cantidad * ini.cuota - apostado
     })
-  }, [cuotas])
+  }, [cuotas,ini])
 
 
   const handleChangeCuotaValue = (index, e) => {
     let newInputs = cuotas.map((input, idx) =>
       idx === index ? { ...input, value: e } : input
-    );
-    setCuotas(newInputs);
-  };
-
-  const handleChangeCuotaResult = (index, e) => {
-    let newInputs = cuotas.map((input, idx) =>
-      idx === index ? { ...input, result: e } : input
     );
     setCuotas(newInputs);
   };
