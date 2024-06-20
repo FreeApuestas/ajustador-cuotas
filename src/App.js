@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 
 function App() {
 
-  const [nCuotas, setNCuotas] = useState(0);
+  const [nCuotas, setNCuotas] = useState(1);
   const [ini, setIni] = useState({ cantidad: 0, cuota: 0 });
   const [cuotas, setCuotas] = useState([]);
   const [res, setRes] = useState({ apostado: 0, ganado: 0 })
@@ -60,14 +60,8 @@ function App() {
     let temp=[];
     for (let j = 0; j <= cuotas.length - 1; j++) {
       temp.push({value:cuotas[j].value,result:sol[j][1]})
-      // handleChangeCuotaResult(abc.indexOf(sol[j][0]), sol[j][1]);
     }
     setCuotas(temp);
-    // let apostado = cuotas.map((c) => c.result).reduce((partialSum, a) => partialSum + a, 0);
-    // setRes({
-    //   apostado: apostado,
-    //   ganado: ini.cantidad * ini.cuota - apostado
-    // })
   }
 
   return (
@@ -83,7 +77,7 @@ function App() {
       <Row className='pad'>
         <InputGroup>
           <InputGroup.Text>Nº Cuotas que cubren</InputGroup.Text>
-          <Form.Control aria-label="cuota" type="number" min="0" max="6" onChange={(e) => updateNCuotas(e.target.value)} />
+          <Form.Control aria-label="cuota" type="number" defaultValue={nCuotas} min="0" max="6" onChange={(e) => updateNCuotas(e.target.value)} />
         </InputGroup>
         <InputGroup>
           <InputGroup.Text>Cuota ganadora</InputGroup.Text>
