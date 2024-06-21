@@ -10,7 +10,7 @@ function App() {
   const [res, setRes] = useState({ apostado: 0, ganado: 0 });
   const [refresh, setRefresh] = useState(true);
 
-  const abc = ["A", "B", "C", "D", "E", "F"]
+  const abc = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
 
   useEffect(() => {
     const initialInputs = Array.from({ length: nCuotas }, () => ({ value: 0, result: 0 }));
@@ -48,8 +48,8 @@ function App() {
     let value = parseInt(number);
     if (isNaN(value) || value < 0) {
       value = 0;
-    } else if (value > 6) {
-      value = 6;
+    } else if (value > 10) {
+      value = 10;
     }
     setNCuotas(value);
   }
@@ -97,7 +97,7 @@ function App() {
       <Row className='pad'>
         <InputGroup>
           <InputGroup.Text>Nº Cuotas que cubren</InputGroup.Text>
-          <Form.Control aria-label="cuota" type="number" defaultValue={nCuotas} min="0" max="6" onChange={(e) => updateNCuotas(e.target.value)} />
+          <Form.Control aria-label="cuota" type="number" defaultValue={nCuotas} min="1" max="10" onChange={(e) => updateNCuotas(e.target.value)} />
         </InputGroup>
         <InputGroup>
           <InputGroup.Text>Cuota ganadora</InputGroup.Text>
