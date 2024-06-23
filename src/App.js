@@ -1,6 +1,7 @@
 import './App.css';
 import { InputGroup, Form, Container, Row, Col, Alert } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
+import calculateAnswer from "./Calculator";
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
   useEffect(() => {
     try {
       calcular()
+      // calcularNew()
     } catch (error) {
 
     }
@@ -48,8 +50,8 @@ function App() {
     let value = parseInt(number);
     if (isNaN(value) || value < 0) {
       value = 0;
-    } else if (value > 10) {
-      value = 10;
+    } else if (value > 5) {
+      value = 5;
     }
     setNCuotas(value);
   }
@@ -70,12 +72,35 @@ function App() {
         }
         return (1 - item.value) + abc[index] + rest.map((it) => "+" + abc[it]).join("") + "+" + ini.cantidad + "=0"
       });
-      console.log(arr);
       var sol = nerdamer.solveEquations(arr);
       console.log(sol);
       for (let j = 0; j <= cuotas.length - 1; j++) {
         temp.push({ value: cuotas[j].value, result: parseFloat(sol[j][1]).toFixed(2) })
       }
+    }
+    setCuotas(temp);
+  }
+
+  function calcularNew() {
+    let temp = [];
+    let arr = cuotas.map((item, index) => {
+      let rest = [];
+      for (let j = 0; j <= cuotas.length - 1; j++) {
+        if (j !== index) {
+          rest.push(1);
+        } else {
+          rest.push(1 - item.value)
+        }
+      }
+      rest.push(parseFloat(ini.cantidad));
+      return rest;
+    });
+    console.log(arr);
+    console.log(calculateAnswer(arr));
+    var sol = calculateAnswer(arr).map((item) => -(item.toFixed(2)));
+    console.log(sol);
+    for (let j = 0; j <= cuotas.length - 1; j++) {
+      temp.push({ value: cuotas[j].value, result: sol[j] })
     }
     setCuotas(temp);
   }
@@ -89,15 +114,15 @@ function App() {
       </Row>
       <Row className='pad'>
         <Col>
-        <Alert key={"info"} variant={"info"}>
-          Calculadora de cuotas
-        </Alert>
+          <Alert key={"info"} variant={"info"}>
+            Calculadora de cuotas
+          </Alert>
         </Col>
       </Row>
       <Row className='pad'>
         <InputGroup>
           <InputGroup.Text>Nº Cuotas que cubren</InputGroup.Text>
-          <Form.Control aria-label="cuota" type="number" defaultValue={nCuotas} min="1" max="10" onChange={(e) => updateNCuotas(e.target.value)} />
+          <Form.Control aria-label="cuota" type="number" defaultValue={nCuotas} min="1" max="5" onChange={(e) => updateNCuotas(e.target.value)} />
         </InputGroup>
         <InputGroup>
           <InputGroup.Text>Cuota ganadora</InputGroup.Text>
