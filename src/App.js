@@ -81,6 +81,7 @@ function App() {
     setCuotas(temp);
   }
 
+  // eslint-disable-next-line
   function calcularNew() {
     let temp = [];
     let arr = cuotas.map((item, index) => {

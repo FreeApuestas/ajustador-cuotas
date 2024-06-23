@@ -1,4 +1,3 @@
-let withAs = (obj, cb) => cb(obj)
 let makeArray = num => [...Array(num).keys()]
 let elim = (arr, n = 0) => arr.slice(-2-n)[0]
 let rest = (arr, n = 0) => arr.filter(
